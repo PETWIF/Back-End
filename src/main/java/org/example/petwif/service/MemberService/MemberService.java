@@ -1,6 +1,7 @@
 package org.example.petwif.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
+import org.example.petwif.JWT.JwtTokenProvider;
 import org.example.petwif.domain.entity.Member;
 import org.example.petwif.domain.enums.Gender;
 import org.example.petwif.domain.enums.Telecom;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder encoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    //private final CustomUserDetailsService userDetailsService;
 
     @Transactional
     public Boolean EmailSignup(EmailSignupRequestDTO dto) {

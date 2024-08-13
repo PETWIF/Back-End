@@ -50,6 +50,12 @@ public class Member extends BaseEntity {
 
     private boolean autoLogin;
 
+    // provider : google이 들어감
+    private String provider;
+
+    // providerId : 구굴 로그인 한 유저의 고유 ID가 들어감
+    private String providerId;
+
     // 양방향 매핑을 해야 멤버가 탈퇴할때 pet도 없어지므로 이건 해야함! 그런 관계가 아니면 굳이 안 넣어도 됨 복잡해져서
     @OneToMany(fetch = FetchType.LAZY)
     private List<Pet> myPet = new ArrayList<>();
