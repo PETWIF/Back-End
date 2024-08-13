@@ -32,7 +32,10 @@ public enum ErrorStatus implements BaseErrorCode {
     ALBUM_NOT_FOUND(HttpStatus.BAD_REQUEST, "ALBUM4001", "앨범을 찾을 수 없습니다."),
     ALBUM_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "ALBUM4011", "앨범에 대한 권한이 없습니다."),
 
-    BLOCK_NOT_FOUND(HttpStatus.BAD_REQUEST, "BLOCK4001", "차단한 내역을 찾을 수 없습니다.");
+    BLOCK_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "BLOCK4001", "이미 차단된 사용자입니다."),
+    BLOCK_NOT_FOUND(HttpStatus.BAD_REQUEST, "BLOCK4002", "차단한 내역을 찾을 수 없습니다."),
+    BLOCK_PAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "BLOCK4003", "차단 리스트를 확인할 수 없습니다. 유효하지 않은 페이지입니다.");
+
 
     private final HttpStatus httpStatus;
     private final String code;

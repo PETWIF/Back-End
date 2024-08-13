@@ -1,6 +1,8 @@
 package org.example.petwif.service.BlockService;
 
 import lombok.RequiredArgsConstructor;
+import org.example.petwif.apiPayload.code.status.ErrorStatus;
+import org.example.petwif.apiPayload.exception.handler.BlockHandler;
 import org.example.petwif.domain.entity.Block;
 import org.example.petwif.domain.entity.Member;
 import org.example.petwif.repository.BlockRepository;
@@ -24,6 +26,12 @@ public class BlockQueryServiceImpl implements BlockQueryService {
 
         Member member = memberRepository.findById(memberId).get();
 
-        return blockRepository.findAllByMember(member, PageRequest.of(page, 2));
+        Slice<Block> blockList = blockRepository.findAllByMemberOrderByCreatedAt(member, PageRequest.of(page, 5));
+
+        if (blockList.isEmpty() || page < 0) {
+            throw new BlockHandler(ErrorStatus.BLOCK_PAGE_NOT_FOUND);
+        }
+
+        return blockList;
     }
 }

@@ -12,6 +12,8 @@ public class BlockConverter {
 
     public static BlockResponseDTO.BlockResultDTO toBlockResultDTO(Block block) {
         return BlockResponseDTO.BlockResultDTO.builder()
+                .id(block.getId())
+                .memberId(block.getMember().getId())
                 .targetId(block.getTarget().getId())
                 .createdAt(LocalDateTime.now())
                 .build();

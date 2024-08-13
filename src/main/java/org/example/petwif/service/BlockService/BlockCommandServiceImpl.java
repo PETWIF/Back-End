@@ -20,19 +20,24 @@ public class BlockCommandServiceImpl implements BlockCommandService {
 
     @Override
     @Transactional
-    public Block doBlock(Long memberId, Long targetId) {
+    public Block blockMember(Long memberId, Long targetId) {
 
         Block block = new Block();
 
+        if (blockRepository.existsByMember_IdAndTarget_Id(memberId, targetId)) {
+            throw new BlockHandler(ErrorStatus.BLOCK_ALREADY_EXIST);
+        }
+
         block.setMember(memberRepository.findById(memberId).get());
         block.setTarget(memberRepository.findById(targetId).get());
+
 
         return blockRepository.save(block);
     }
 
     @Override
     @Transactional
-    public void deleteBlock(Long memberId, Long targetId) {
+    public void unblockMember(Long memberId, Long targetId) {
         Block block = blockRepository.findByMember_IdAndTarget_Id(memberId, targetId).orElseThrow(() -> new BlockHandler(ErrorStatus.BLOCK_NOT_FOUND));
 
         blockRepository.delete(block);
