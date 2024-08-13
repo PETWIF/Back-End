@@ -18,8 +18,8 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())  // HTTP Basic 비활성화
                 .formLogin(formLogin -> formLogin.disable())  // 폼 로그인 비활성화
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/signup/email", "/pet/add","/pet/edit",
-                                "/blocks","/", "/member/**", "/verify").permitAll()  // 이 경로들은 인증 없이 접근 허용
+                        .requestMatchers(
+                               "/**").permitAll()  // 이 경로들은 인증 없이 접근 허용
                         .anyRequest().authenticated()  // 그 외의 모든 요청은 인증 필요
 
                         /*.logout().logoutSuccessUrl("/") //로그아웃 성공시 "/"주소로 이동

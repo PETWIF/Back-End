@@ -24,6 +24,8 @@ public enum ErrorStatus implements BaseErrorCode {
     // Member Error
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
 
+    COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT4001", "댓글이 없습니다."),
+
     // Follow Error
     FRIEND_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "FRIEND4001", "이미 친구입니다."),
     FRIEND_NOT_FOUND(HttpStatus.BAD_REQUEST, "FRIEND4002", "친구가 아닙니다."),

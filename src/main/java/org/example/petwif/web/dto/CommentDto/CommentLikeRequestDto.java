@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentRequestDto {
+public class CommentLikeRequestDto {
 
-    private Long id;
-    private String content;
+    private Long memberId;
+    private Long commentId;
 
 }
