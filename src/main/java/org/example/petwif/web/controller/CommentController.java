@@ -28,7 +28,7 @@ public class CommentController {
             Long commentId = commentService.writeComment(commentRequestDto, albumId, nameId);
             return ResponseEntity.ok(commentId);
         } catch (GeneralException e) {
-            return ResponseEntity.status(e.getErrorStatus().getHttpStatus()).build();
+            return ResponseEntity.status(e.getErrorReason().getHttpStatus()).build();
         }
     }
 
@@ -39,7 +39,7 @@ public class CommentController {
             List<CommentResponseDto> comments = commentService.commentList(albumId);
             return ResponseEntity.ok(comments);
         } catch (GeneralException e) {
-            return ResponseEntity.status(e.getErrorStatus().getHttpStatus()).build();
+            return ResponseEntity.status(e.getErrorReason().getHttpStatus()).build();
         }
     }
 
@@ -52,7 +52,7 @@ public class CommentController {
             commentService.updateComment(commentRequestDto, commentId);
             return ResponseEntity.ok().build();
         } catch (GeneralException e) {
-            return ResponseEntity.status(e.getErrorStatus().getHttpStatus()).build();
+            return ResponseEntity.status(e.getErrorReason().getHttpStatus()).build();
         }
     }
 
@@ -63,7 +63,7 @@ public class CommentController {
             commentService.deleteComment(commentId);
             return ResponseEntity.ok().build();
         } catch (GeneralException e) {
-            return ResponseEntity.status(e.getErrorStatus().getHttpStatus()).build();
+            return ResponseEntity.status(e.getErrorReason().getHttpStatus()).build();
         }
     }
 
@@ -78,7 +78,7 @@ public class CommentController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
         } catch (GeneralException e) {
-            return ResponseEntity.status(e.getErrorStatus().getHttpStatus()).build();
+            return ResponseEntity.status(e.getErrorReason().getHttpStatus()).build();
         }
     }
 
@@ -93,7 +93,7 @@ public class CommentController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
         } catch (GeneralException e) {
-            return ResponseEntity.status(e.getErrorStatus().getHttpStatus()).build();
+            return ResponseEntity.status(e.getErrorReason().getHttpStatus()).build();
         }
     }
 }

@@ -26,5 +26,6 @@ public class AlbumReport extends BaseEntity {
     @JoinColumn(name="album_id")
     private Album album;
 
-    private String content;
+    //@Column(nullable = false)
+    private String reason;
 }

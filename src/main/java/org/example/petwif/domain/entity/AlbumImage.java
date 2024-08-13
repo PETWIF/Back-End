@@ -24,7 +24,7 @@ public class AlbumImage extends BaseEntity {
 
     private String imageURL;
 
-    private String imageContent;
+   //앨범 이미지 content 삭제
 }
 
 

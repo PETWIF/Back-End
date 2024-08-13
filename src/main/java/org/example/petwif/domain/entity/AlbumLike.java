@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.petwif.domain.common.BaseEntity;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -25,4 +27,5 @@ public class AlbumLike extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="album_id")
     private Album album;
+
 }
