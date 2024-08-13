@@ -1,16 +1,20 @@
 package org.example.petwif.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.petwif.domain.common.BaseEntity;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import java.util.List;
 
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
+@DynamicUpdate
+@DynamicInsert
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Chat extends BaseEntity {
 
@@ -26,7 +30,22 @@ public class Chat extends BaseEntity {
     @JoinColumn(name="chatRoom_id")
     private ChatRoom chatRoom;
 
+    @Column(nullable = false, length = 255)
     private String content;
 
+    @Column(nullable = false)
     private boolean isCheck;
+
+    private String imageUrl;
+
+    //채팅 보내기
+    public void setChatRoom(ChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
+        chatRoom.getChatList().add(this);
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.getChatList().add(this);
+    }
 }
