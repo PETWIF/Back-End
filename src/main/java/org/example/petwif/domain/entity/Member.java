@@ -41,6 +41,7 @@ public class Member extends BaseEntity {
     private Telecom telecom;
 
     private String address;
+
     private String status;
     private String email;
     private String pw;
@@ -62,6 +63,12 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Block> blockList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Friend> friendList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Notification> notificationList = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)

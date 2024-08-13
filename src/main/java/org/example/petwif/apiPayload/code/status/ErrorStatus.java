@@ -24,11 +24,18 @@ public enum ErrorStatus implements BaseErrorCode {
     // Member Error
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
 
+    // Notification Error
+    NOTIFICATION_PAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "Notification4001", "알람 리스트를 확인할 수 없습니다. 유효하지 않은 페이지입니다."),
+
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT4001", "댓글이 없습니다."),
 
     // Follow Error
     FRIEND_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "FRIEND4001", "이미 친구입니다."),
     FRIEND_NOT_FOUND(HttpStatus.BAD_REQUEST, "FRIEND4002", "친구가 아닙니다."),
+    FRIEND_REQUEST_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "FRIEND4003", "이미 친구 요청한 상태입니다."),
+    FRIEND_REQUEST_NOT_FOUND(HttpStatus.BAD_REQUEST, "FRIEND4004", "친구 요청이 존재하지 않습니다."),
+    FRIEND_REJECT_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "FRIEND4005", "이미 친구 요청을 거절한 상태입니다."),
+    FRIEND_PAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "FRIEND4006", "친구 리스트를 확인할 수 없습니다. 유효하지 않은 페이지입니다."),
 
     // Album Error
     ALBUM_NOT_FOUND(HttpStatus.BAD_REQUEST, "ALBUM4001", "앨범을 찾을 수 없습니다."),

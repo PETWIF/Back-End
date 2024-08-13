@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.petwif.domain.common.BaseEntity;
+import org.example.petwif.domain.enums.FriendStatus;
 
 @Entity
 @Getter
@@ -25,4 +26,22 @@ public class Friend extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="friend_id")
     private Member friend;
+
+    @Enumerated(EnumType.STRING)
+    private FriendStatus status;
+
+    public void setMember(Member member) {
+        if (this.member != null)
+            member.getFriendList().remove(this);
+        this.member = member;
+        member.getFriendList().add(this);
+    }
+
+    public void setFriend(Member friend) {
+        this.friend = friend;
+    }
+
+    public void setStatus(FriendStatus status) {
+        this.status = status;
+    }
 }
