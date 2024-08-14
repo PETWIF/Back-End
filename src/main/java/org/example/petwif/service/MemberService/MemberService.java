@@ -2,6 +2,8 @@ package org.example.petwif.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 import org.example.petwif.JWT.JwtTokenProvider;
+import org.example.petwif.JWT.JwtUtil;
+import org.example.petwif.apiPayload.ApiResponse;
 import org.example.petwif.domain.entity.Member;
 import org.example.petwif.domain.enums.Gender;
 import org.example.petwif.domain.enums.Telecom;
@@ -16,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder encoder;
-    private final JwtTokenProvider jwtTokenProvider;
     //private final CustomUserDetailsService userDetailsService;
 
     @Transactional
@@ -43,20 +44,21 @@ public class MemberService {
 
         return true;
     }
-    public Boolean login(LoginRequestDto dto){
+    public ApiResponse<String> login(LoginRequestDto dto){
         String clientEmail = dto.getEmail();
         String clientPw = dto.getPw();
         if (memberRepository.checkEmail(clientEmail).isPresent()){
             Member member = memberRepository.findByEmail(clientEmail);
             String dbPw = member.getPw();
             if (encoder.matches(clientPw,dbPw)){
-                return true;
+                String token = JwtUtil.generateToken(clientEmail);
+                return ApiResponse.onSuccess(token);
             }
             else {
-               throw new IllegalArgumentException("비밀번호 불일치");
+               return ApiResponse.onFailure("400", "로그인 실패", "비밀번호가 틀렸습니다.");
             }
         }
-        else return false;
+        else return ApiResponse.onFailure("400", "회원이 아닙니다.", "회원이 아닙니다. 회원가입을 해주세요.");
 
     }
 

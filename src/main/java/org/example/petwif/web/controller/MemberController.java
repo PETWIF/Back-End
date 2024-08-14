@@ -31,14 +31,7 @@ public class MemberController {
 
     @PostMapping("/email/login")  // 이것도 성공, accessToken으로 해야하나.. 이것 처리
     public ApiResponse<String> login(@RequestBody LoginRequestDto dto){
-        try{
-            if (memberService.login(dto)){
-                return ApiResponse.onSuccess("로그인 성공");
-            }
-            else return ApiResponse.onFailure("400", "회원이 아닙니다.", "회원이 아닙니다. 회원가입을 해주세요.");
-        } catch (IllegalArgumentException e){
-            return ApiResponse.onFailure("400", "로그인 실패", "비밀번호가 틀렸습니다.");
-        }
+        return memberService.login(dto);
     }
 
     @PatchMapping("/nickname")  // 닉네임 변경할 때 중복방지 및 변경 : 완료
