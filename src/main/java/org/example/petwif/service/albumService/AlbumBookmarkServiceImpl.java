@@ -63,7 +63,7 @@ public class AlbumBookmarkServiceImpl implements AlbumBookmarkService{
                 .orElseThrow(() -> new GeneralException(ErrorStatus.ALBUM_NOT_FOUND));
         List<AlbumBookmark> bookmarks = albumBookmarkRepository.findByAlbum(album);
         return bookmarks.stream()
-                .map(bookmark ->new AlbumResponseDto.BookmarkResultDto(bookmark.getMember().getId(), bookmark.getMember().getName(), bookmark.getMember().getProfile_url()))
+                .map(bookmark ->new AlbumResponseDto.BookmarkResultDto(bookmark.getMember().getId(), bookmark.getMember().getUsername(), bookmark.getMember().getProfile_url()))
                 .collect(Collectors.toList());
     }
 }

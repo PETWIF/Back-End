@@ -67,7 +67,7 @@ public class AlbumLikeServiceImpl implements AlbumLikeService{
 
         List<AlbumLike> likes = albumLikeRepository.findByAlbum(album);
         return likes.stream()
-                .map(like -> new AlbumResponseDto.LikeResultDto(like.getMember().getId(), like.getMember().getName(), like.getMember().getProfile_url()))
+                .map(like -> new AlbumResponseDto.LikeResultDto(like.getMember().getId(), like.getMember().getUsername(), like.getMember().getProfile_url()))
                 .collect(Collectors.toList());
     }
 

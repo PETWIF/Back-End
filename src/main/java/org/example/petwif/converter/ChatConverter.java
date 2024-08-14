@@ -72,7 +72,7 @@ public class ChatConverter {
                 .memberId(chatRoom.getMember().getId())
                 .otherId(chatRoom.getOther().getId())
                 .chatRoomId(chatRoom.getId())
-                .roomName(chatRoom.getMember().getName())
+                .roomName(chatRoom.getMember().getUsername())
                 .createdAt(LocalDateTime.now())
                 .build();
     }

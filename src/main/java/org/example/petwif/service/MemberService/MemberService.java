@@ -1,6 +1,7 @@
 package org.example.petwif.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
+import org.example.petwif.JWT.JwtToken;
 import org.example.petwif.JWT.JwtTokenProvider;
 import org.example.petwif.JWT.JwtUtil;
 import org.example.petwif.apiPayload.ApiResponse;
@@ -9,6 +10,9 @@ import org.example.petwif.domain.enums.Gender;
 import org.example.petwif.domain.enums.Telecom;
 import org.example.petwif.repository.MemberRepository;
 import org.example.petwif.web.dto.MemberDto.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder encoder;
-    //private final CustomUserDetailsService userDetailsService;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public Boolean EmailSignup(EmailSignupRequestDTO dto) {
@@ -37,30 +42,66 @@ public class MemberService {
         }
 
         Member member = new Member();
-        member.setName(dto.getName());
+        member.setUsername(dto.getName());
         member.setEmail(dto.getEmail());
         member.setPw(encoder.encode(pw1));
         memberRepository.save(member);
 
         return true;
     }
-    public ApiResponse<String> login(LoginRequestDto dto){
+/*
+    @Transactional
+    public JwtToken signIn(String username, String password) {
+        // 1. username + password 를 기반으로 Authentication 객체 생성
+        // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+
+        // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
+        // authenticate 메서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+        JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+
+        return jwtToken;
+    }
+ */
+    public ApiResponse<JwtToken> login(LoginRequestDto dto){
         String clientEmail = dto.getEmail();
         String clientPw = dto.getPw();
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(clientEmail, clientPw);
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
         if (memberRepository.checkEmail(clientEmail).isPresent()){
             Member member = memberRepository.findByEmail(clientEmail);
             String dbPw = member.getPw();
             if (encoder.matches(clientPw,dbPw)){
-                String token = JwtUtil.generateToken(clientEmail);
-                return ApiResponse.onSuccess(token);
+                return ApiResponse.onSuccess(jwtToken);
             }
             else {
-               return ApiResponse.onFailure("400", "로그인 실패", "비밀번호가 틀렸습니다.");
+                return ApiResponse.onFailure("400", "로그인 실패", jwtToken );
             }
         }
-        else return ApiResponse.onFailure("400", "회원이 아닙니다.", "회원이 아닙니다. 회원가입을 해주세요.");
+        else return ApiResponse.onFailure("400", "회원이 아닙니다.", jwtToken);
 
     }
+//    public ApiResponse<String> login(LoginRequestDto dto){
+//        String clientEmail = dto.getEmail();
+//        String clientPw = dto.getPw();
+//        if (memberRepository.checkEmail(clientEmail).isPresent()){
+//            Member member = memberRepository.findByEmail(clientEmail);
+//            String dbPw = member.getPw();
+//            if (encoder.matches(clientPw,dbPw)){
+//                String token = JwtUtil.generateToken(clientEmail);
+//                return ApiResponse.onSuccess(token);
+//            }
+//            else {
+//               return ApiResponse.onFailure("400", "로그인 실패", "비밀번호가 틀렸습니다.");
+//            }
+//        }
+//        else return ApiResponse.onFailure("400", "회원이 아닙니다.", "회원이 아닙니다. 회원가입을 해주세요.");
+//
+//    }
 
 
     public Boolean checkNickName(Long mId, NicknameDto nickname){

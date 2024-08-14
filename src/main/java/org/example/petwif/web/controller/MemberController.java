@@ -1,6 +1,7 @@
 package org.example.petwif.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.petwif.JWT.JwtToken;
 import org.example.petwif.apiPayload.ApiResponse;
 import org.example.petwif.service.MemberService.MemberService;
 import org.example.petwif.web.dto.MemberDto.*;
@@ -30,7 +31,7 @@ public class MemberController {
 
 
     @PostMapping("/email/login")  // 이것도 성공, accessToken으로 해야하나.. 이것 처리
-    public ApiResponse<String> login(@RequestBody LoginRequestDto dto){
+    public ApiResponse<JwtToken> login(@RequestBody LoginRequestDto dto){
         return memberService.login(dto);
     }
 
