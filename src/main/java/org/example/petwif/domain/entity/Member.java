@@ -1,6 +1,8 @@
 package org.example.petwif.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.example.petwif.domain.common.BaseEntity;
 import org.example.petwif.domain.enums.Gender;
@@ -31,6 +33,10 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    private String oauthProvider;
+
+    //private String accessToken;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
@@ -42,7 +48,9 @@ public class Member extends BaseEntity {
     private String address;
 
     private String status;
+    @Email
     private String email;
+    @Size(min = 12)
     private String pw;
     //LocalDateTime 사용하면 될까요?
     //private LocalDateTime inactiveDate;
@@ -78,4 +86,9 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<ChatRoom> chatRoomList = new ArrayList<>();
 
+    @Builder
+    public Member(Long id, String email) {
+        this.id = id;
+        this.email = email;
+    }
 }

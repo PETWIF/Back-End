@@ -1,5 +1,6 @@
 package org.example.petwif.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.petwif.apiPayload.ApiResponse;
 import org.example.petwif.apiPayload.exception.GeneralException;
@@ -18,11 +19,8 @@ public class MailController {
 
     /* Send Email: 인증번호 전송 버튼 click */
     @PostMapping("/signup/email")
-    public ApiResponse<String> sendVerificationEmail(@RequestBody EmailRequestDto mail) {
+    public ApiResponse<String> sendVerificationEmail(@RequestBody @Valid EmailRequestDto mail) {
         try{
-//            Member member = memberRepository.findByMemberId(5L);
-//            System.out.println(member.getName());
-
             String email = mail.getEmail();
             emailVerificationService.sendVerificationEmail(email);
             return ApiResponse.onSuccess("Verification code sent to " + email);

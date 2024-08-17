@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,38 +24,63 @@ public class PetService {
     private final PetRepository petRepository;
     private final MemberRepository memberRepository;
 
-    public void addPet(Long id, List<PetRequestDto> dto){
+    public List<PetResponseDto> addPet(Long id, List<PetRequestDto> dto){
         Member member = memberRepository.findByMemberId(id);
+        List<Pet> petList = new ArrayList<>();
         for (PetRequestDto petRequestDto : dto){
             Pet pet = new Pet();
             pet.setPetAge(petRequestDto.getAge());
-            pet.setPetGender(PetGender.valueOf(petRequestDto.getGender()));
+            pet.setPetGender(petRequestDto.getGender());
             pet.setPetName(petRequestDto.getPetName());
             pet.setPetKind(petRequestDto.getPetKind());
             pet.setMember(member);
             petRepository.save(pet);
-
+            petList.add(pet);
         }
+        return Pets(petList);
+
     }
 
+    public PetResponseDto editPet(Long mId, Long petId, PetRequestDto dto){
+        Member member = memberRepository.findByMemberId(mId);
+        Pet pet = petRepository.findById(petId).orElseThrow(()
+                -> new IllegalArgumentException("Pet not found"));
 
-/*
-        public void editPet(Long id, List<PetRequestDto> dto){
-        Member member = memberRepository.findByMemberId(id);
-//        private String petName;
-//        private PetGender gender;
-//        private int age;
-//        private String petKind;
-
-        for (PetRequestDto petRequestDto : dto){
-            if (petRequestDto.getPetName() != null) {
-
-            }
-        }
-
-
-        //pet.patch(pet);
+        if ((dto.getAge()) != null) pet.setPetAge(dto.getAge());
+        if ((dto.getGender()) != null) pet.setPetGender(dto.getGender());
+        if ((dto.getPetName()) != null) pet.setPetName(dto.getPetName());
+        if (dto.getPetKind() != null) pet.setPetKind(dto.getPetKind());
+        pet.setMember(member);
+        petRepository.save(pet);
+        return mapPetToResponse(pet);
     }
-*/
 
+    private PetResponseDto mapPetToResponse(Pet pet) {
+        return PetResponseDto.builder()
+                .petId(pet.getId())
+                .petName(pet.getPetName())
+                .petKind(pet.getPetKind())
+                .age(pet.getPetAge())
+                .gender(pet.getPetGender())
+                .build();
+    }
+
+    public List<PetResponseDto> getAllPets(Long id){
+        List<Pet> pets = petRepository.findPetsByMember(memberRepository.findByMemberId(id));
+        return pets.stream()
+                .map(this::mapPetToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<PetResponseDto> Pets(List<Pet> pets){
+        return pets.stream()
+                .map(this::mapPetToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public void deletePet(Long id){
+        Pet pet = petRepository.findById(id).orElseThrow(()
+                -> new IllegalArgumentException("Pet not found"));
+        petRepository.delete(pet);
+    }
 }
