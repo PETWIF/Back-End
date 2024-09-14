@@ -125,6 +125,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Service
@@ -186,7 +188,9 @@ public class GoogleLoginService {
      */
     private GoogleTokenResponse getGoogleToken(String authorizationCode) throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("code", authorizationCode);
+        String code = URLDecoder.decode(authorizationCode, StandardCharsets.UTF_8);
+        System.out.println("code = " + code);
+        params.add("code", code);
         params.add("client_id", googleClientId);
         params.add("client_secret", googleClientSecret);
         params.add("redirect_uri", googleRedirectUrl);
@@ -223,6 +227,7 @@ public class GoogleLoginService {
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
+        // get이었는데 post로 바꿈
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             return objectMapper.readValue(responseEntity.getBody(), GoogleUserInfo.class);

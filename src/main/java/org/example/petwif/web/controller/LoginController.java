@@ -12,6 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 @RestController
 @Slf4j
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -29,7 +32,8 @@ public class LoginController {
     @ResponseBody
     public ApiResponse<TokenDto> googleLogin(@RequestParam("code") String code) {
         try {
-            TokenDto dto = googleLoginService.loginByGoogleAndSignUp(code);
+            String decode = URLDecoder.decode(code, StandardCharsets.UTF_8);
+            TokenDto dto = googleLoginService.loginByGoogleAndSignUp(decode);
             return ApiResponse.onSuccess(dto);
         } catch (Exception e) {
             return ApiResponse.onFailure("400", e.getMessage(), null);
